@@ -39,7 +39,16 @@ const mongoose = require("mongoose");
 
 exports.getContests = async (req, res) => {
   try {
-    const { contestId, status, title, experience, budget } = req.query;
+    const {
+      contestId,
+      status,
+      title,
+      experience,
+      budget,
+      jdUrl,
+      positions,
+      contestType
+    } = req.query;
 
     let filter = {};
 
@@ -70,6 +79,21 @@ exports.getContests = async (req, res) => {
         $regex: budget,
         $options: "i"
       };
+    }
+
+    if (jdUrl) {
+      filter["details.jdUrl"] = {
+        $regex: jdUrl,
+        $options: "i"
+      };
+    }
+
+    if (positions) {
+      filter["details.jobDetails.noOfPositions"] = Number(positions);
+    }
+
+    if (contestType) {
+      filter["contestPlanType"] = contestType;
     }
 
     const contests = await Contest.find(filter);
