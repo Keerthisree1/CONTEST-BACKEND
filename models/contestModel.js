@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const ContestSchema = new mongoose.Schema(
   {
@@ -50,7 +50,22 @@ const ContestSchema = new mongoose.Schema(
   }
 );
 
-//
 ContestSchema.index({ contestStatus: 1, "details.jobDetails.noOfPositions": 1 });
 
-module.exports = mongoose.model("Contest", ContestSchema);
+//
+const contestsSchema = new mongoose.Schema(
+  {
+    contestName: String,
+    employerId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now
+    }
+  }
+);
+
+module.exports = mongoose.model('Contest', contestsSchema);
+

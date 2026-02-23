@@ -10,6 +10,7 @@ const app = express();
 app.use(express.json());
 
 app.use("/api", require("./routes/contestRoutes"));
+app.use("/api", require("./routes/marketplaceRoutes"));
 
 const PORT = process.env.PORT || 5000;
 

@@ -11,11 +11,14 @@ exports.getContests = async (req, res) => {
       budget,
       jdUrl,
       positions,
-      contestType
+      contestType,
+      page,
+      limit
     } = req.query;
 
     let filter = {};
 
+    //Filters
     if (contestId) {
       filter.contestId = new mongoose.Types.ObjectId(contestId);
     }
@@ -38,14 +41,12 @@ exports.getContests = async (req, res) => {
       };
     }
 
-
     if (budget) {
       filter["details.jobDetails.budget"] = {
         $regex: budget,
         $options: "i"
       };
     }
-
 
     if (jdUrl) {
       filter["details.jdUrl"] = {
@@ -62,13 +63,26 @@ exports.getContests = async (req, res) => {
       filter["contestPlanType"] = contestType;
     }
 
-    const contests = await Contest.find(filter).lean();
+    //Pagination
+    let query = Contest.find(filter).sort({ createdAt: -1 });
+
+    // Apply pagination ONLY if page & limit exist
+    if (page && limit) {
+   const pageNumber = parseInt(page);
+   const limitNumber = parseInt(limit);
+   const skip = (pageNumber - 1) * limitNumber;
+
+    query = query.skip(skip).limit(limitNumber);
+    }
+
+    const contests = await query.lean();
 
     res.json({
-      success: true,
-      total: contests.length,
-      data: contests
+    success: true,
+    total: contests.length,
+    data: contests
     });
+
 
   } catch (error) {
     res.status(500).json({
