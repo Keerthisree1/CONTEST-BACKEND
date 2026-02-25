@@ -52,20 +52,4 @@ const ContestSchema = new mongoose.Schema(
 
 ContestSchema.index({ contestStatus: 1, "details.jobDetails.noOfPositions": 1 });
 
-//
-const contestsSchema = new mongoose.Schema(
-  {
-    contestName: String,
-    employerId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User"
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now
-    }
-  }
-);
-
-module.exports = mongoose.model('Contest', contestsSchema);
-
+module.exports = mongoose.model("Contest", ContestSchema);
