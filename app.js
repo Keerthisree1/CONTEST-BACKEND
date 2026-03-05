@@ -11,6 +11,7 @@ app.use(express.json());
 
 app.use("/api", require("./routes/contestRoutes"));
 app.use("/api", require("./routes/recruiterAddProfilesRoutes"));
+app.use("/api", require("./routes/calendarRoutes"));
 
 const PORT = process.env.PORT || 5000;
 
